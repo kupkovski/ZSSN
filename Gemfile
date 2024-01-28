@@ -2,6 +2,7 @@ source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.2.0"
+gem "active_model_serializers", "~> 0.10"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.8"
@@ -40,7 +41,9 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem "rspec-rails", "~> 6.1"
-  gem "shoulda-matchers"
+  gem "guard", "~> 2.18"
+  gem 'guard-rspec', "~> 4.7", require: false
+  gem "shoulda-matchers", "~> 5.3"
 end
 
 group :development do

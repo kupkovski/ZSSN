@@ -5,6 +5,8 @@ Rails.application.routes.draw do
         member do
           put :update_location
           patch :update_location
+          put :report_infected
+          patch :report_infected
         end
       end
     end
