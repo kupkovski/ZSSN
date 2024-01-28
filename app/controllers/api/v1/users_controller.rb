@@ -35,6 +35,18 @@ module Api
         end
       end
 
+      # PATCH/PUT /users/1/update_location
+      def update_location
+        @user = User.find(params[:id])
+        location_params = update_location_params
+        service = Services::User::UpdateLocationService.new(user: @user, latitude: location_params[:latitude], longitude: location_params[:longitude])
+
+        if service.call
+        else
+          render json: service.error_messages, status: :unprocessable_entity
+        end
+      end
+
       # DELETE /users/1
       def destroy
         @user.destroy
@@ -49,6 +61,10 @@ module Api
         # Only allow a list of trusted parameters through.
         def user_params
           params.require(:user).permit(:name, :gender, :latitude, :longitude, :birthdate)
+        end
+
+        def update_location_params
+          params.require(:user).permit(:latitude, :longitude)
         end
     end
   end
