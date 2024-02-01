@@ -9,7 +9,8 @@ class User < ApplicationRecord
 
   def infected?
     reports = infection_suspections.group(:reporter_id).size
+    return false if reports.empty?
 
-    reports.keys >= 3
+    reports.keys.size >= 3
   end
 end
