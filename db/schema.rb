@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_01_120721) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_01_122248) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,6 +21,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_120721) do
     t.datetime "updated_at", null: false
     t.index ["reporter_id"], name: "index_infected_user_reports_on_reporter_id"
     t.index ["suspect_id"], name: "index_infected_user_reports_on_suspect_id"
+  end
+
+  create_table "inventories", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_inventories_on_user_id"
   end
 
   create_table "items", force: :cascade do |t|
@@ -42,4 +49,5 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_120721) do
 
   add_foreign_key "infected_user_reports", "users", column: "reporter_id"
   add_foreign_key "infected_user_reports", "users", column: "suspect_id"
+  add_foreign_key "inventories", "users"
 end
