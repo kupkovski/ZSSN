@@ -1,6 +1,7 @@
 require 'active_model_serializers'
 
 class UserSerializer < ActiveModel::Serializer
+  has_one :inventory
   attributes :id, :name, :age, :infected
 
   def age

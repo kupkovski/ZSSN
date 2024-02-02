@@ -7,6 +7,12 @@ Rails.application.routes.draw do
           patch :update_location
           put :report_infected
           patch :report_infected
+
+          resource :inventory do
+            member do
+              post :add_item
+            end
+          end
         end
       end
     end
