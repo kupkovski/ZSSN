@@ -1,4 +1,4 @@
-require_relative '../../../services/'
+require_relative '../../../services'
 require_relative '../../../serializers/user_serializer'
 
 module Api
@@ -20,12 +20,20 @@ module Api
 
       # POST /users
       def create
-        @user = User.new(user_params)
+        create_user_params = user_params
 
-        if @user.save
-          render json: @user, status: :created
+        service = Services::User::CreateService.new(
+          name: create_user_params[:name],
+          gender: create_user_params[:gender],
+          latitude: create_user_params[:latitude],
+          longitude: create_user_params[:longitude],
+          birthdate: create_user_params[:birthdate]
+        )
+
+        if response = service.call
+          render json: response, status: :created
         else
-          render json: @user.errors, status: :unprocessable_entity
+          render json: service.errors, status: :unprocessable_entity
         end
       end
 

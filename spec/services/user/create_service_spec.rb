@@ -2,7 +2,7 @@ require 'rails_helper'
 require_relative '../../../app/services/user/create_service'
 
 RSpec.describe Services::User::CreateService, type: :service do
-  let(:valid_attributes) {
+  let(:attributes) {
     {
       name: "John Doe",
       gender: "male",
@@ -14,11 +14,11 @@ RSpec.describe Services::User::CreateService, type: :service do
 
   subject {
     described_class.new(
-      name: "John Doe",
-      gender: "male",
-      latitude: 19.98,
-      longitude: 29.88,
-      birthdate: "1980-01-01"
+      name: attributes[:name],
+      gender: attributes[:gender],
+      latitude: attributes[:latitude],
+      longitude: attributes[:longitude],
+      birthdate: attributes[:birthdate],
     )
   }
 
@@ -31,12 +31,35 @@ RSpec.describe Services::User::CreateService, type: :service do
         .and change { Inventory.count }.by(1)
 
         created_user = User.last
-        expect(created_user.name).to eq valid_attributes[:name]
-        expect(created_user.gender).to eq valid_attributes[:gender]
-        expect(created_user.latitude).to eq valid_attributes[:latitude]
-        expect(created_user.longitude).to eq valid_attributes[:longitude]
+        expect(created_user.name).to eq attributes[:name]
+        expect(created_user.gender).to eq attributes[:gender]
+        expect(created_user.latitude).to eq attributes[:latitude]
+        expect(created_user.longitude).to eq attributes[:longitude]
         expect(created_user.birthdate).to eq Date.new(1980, 1, 1)
         expect(created_user.inventory).to_not be_blank
+      end
+    end
+
+    context 'with invalid attributes' do
+      let(:attributes) {
+        {
+          name: nil,
+          gender: "male",
+          latitude: 19.98,
+          longitude: 29.88,
+          birthdate: "1980-01-01"
+        }
+      }
+
+      it 'does not create the user nor the inventory' do
+        expect do
+          subject.call
+        end.to_not change { User.count }
+
+        expect do
+          subject.call
+        end.to_not change { Inventory.count }
+        expect(subject.errors[:name]).to eq 'Should not be blank'
       end
     end
   end
