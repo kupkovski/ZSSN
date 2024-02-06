@@ -16,6 +16,22 @@ module Api
         render json: @user
       end
 
+      def remove_item
+        @item = Item.find_by(name: item_params[:name])
+        @user = User.find(params[:id])
+
+        if @item.nil?
+          if ::Item::VALID_NAMES.include?(item_params[:name])
+            render json: { error: "Item is not on user's inventory" }, status: :bad_request and return
+          else
+            render json: { error: 'Invalid item name' }, status: :not_found and return
+          end
+        end
+
+        @user.inventory.items.delete(@item)
+        render json: @user
+      end
+
       private
       def item_params
         params.require(:item).permit(:name)

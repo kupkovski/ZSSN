@@ -11,6 +11,7 @@ Rails.application.routes.draw do
           resource :inventory do
             member do
               post :add_item
+              delete :remove_item
             end
           end
         end
