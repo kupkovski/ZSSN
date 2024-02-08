@@ -12,6 +12,8 @@ Rails.application.routes.draw do
             member do
               post :add_item
               delete :remove_item
+              put :exchange_item
+              patch :exchange_item
             end
           end
         end

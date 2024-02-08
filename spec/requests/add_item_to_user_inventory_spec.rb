@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "/api/v1/users/:id/inventory/add_item", type: :request do
-  describe "POST /report_infected" do
+  describe "POST /add_item" do
     let(:user) {
       User.create!(name: "John Doe", latitude: 100, longitude: 200, gender: 'male', birthdate: "1980-01-01")
     }
