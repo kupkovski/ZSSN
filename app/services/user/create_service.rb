@@ -1,3 +1,4 @@
+require_relative 'new_user_contract'
 module Services
   module User
     class CreateService
@@ -35,13 +36,10 @@ module Services
       end
 
       def valid?
-        errors[:name] ||= "Should not be blank" and return false if name.blank?
-        errors[:gender] ||= "Should not be blank" and return false if gender.blank?
-        errors[:latitude] ||= "Should not be blank" and return false if latitude.blank?
-        errors[:longitude] ||= "Should not be blank" and return false if longitude.blank?
-        errors[:birthdate] ||= "Should not be blank" and return false if birthdate.blank?
+        contract = NewUserContract.new.call(name:, gender:, latitude:, longitude:, birthdate:)
+        @errors = contract.errors.to_h if contract.failure?
 
-        true
+        contract.success?
       end
     end
   end

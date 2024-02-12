@@ -59,7 +59,7 @@ RSpec.describe Services::User::CreateService, type: :service do
         expect do
           subject.call
         end.to_not change { Inventory.count }
-        expect(subject.errors[:name]).to eq 'Should not be blank'
+        expect(subject.errors[:name]).to eq ["must be filled"]
       end
     end
   end
