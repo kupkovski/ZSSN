@@ -46,7 +46,7 @@ RSpec.describe "/api/v1/users/:id/inventory/exchange_item", type: :request do
 
       context "with valid parameters" do
 
-        it 'does not add the item to the user inventory', focus: true do
+        it 'does not add the item to the user inventory' do
           expect do
             put exchange_item_api_v1_inventory_path(user), params: {
               destination_user: {
@@ -82,7 +82,7 @@ RSpec.describe "/api/v1/users/:id/inventory/exchange_item", type: :request do
                 item_names: [water.name]
                 },
               origin_user: {
-                item_names: [water.name, food.name]
+                item_names: [water.name]
               }
             }, as: :json
 
