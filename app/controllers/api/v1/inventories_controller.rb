@@ -34,24 +34,24 @@ module Api
 
       def exchange_item
         @user = User.find(params[:id])
-        @destination_user = User.find(params[:destination_user][:id])
+        @destination_user = User.find(destination_item_params[:id])
 
-        if params[:origin_user][:item_names].any? {|item_name| !::Item::VALID_NAMES.include?(item_name)}
+        if origin_item_params[:item_names].any? {|item_name| !::Item::VALID_NAMES.include?(item_name)}
           render json: { error: "Invalid item name" }, status: :bad_request and return
         end
 
-        @origin_items = @user.inventory.items.where(name: params[:origin_user][:item_names])
-        missing_items = params[:origin_user][:item_names] - @origin_items.map(&:name)
+        @origin_items = @user.inventory.items.where(name: origin_item_params[:item_names])
+        missing_items = origin_item_params[:item_names] - @origin_items.map(&:name)
         if missing_items.any?
           render json: { error: "the following items are not on origin user's inventory: #{missing_items.join(', ')}" }, status: :not_found and return
         end
 
-        if params[:destination_user][:item_names].any? {|item_name| !::Item::VALID_NAMES.include?(item_name)}
+        if destination_item_params[:item_names].any? {|item_name| !::Item::VALID_NAMES.include?(item_name)}
           render json: { error: "Invalid item name" }, status: :bad_request and return
         end
 
-        @destination_user_items = @destination_user.inventory.items.where(name: params[:destination_user][:item_names])
-        missing_items = params[:destination_user][:item_names] - @destination_user_items.map(&:name)
+        @destination_user_items = @destination_user.inventory.items.where(name: destination_item_params[:item_names])
+        missing_items = destination_item_params[:item_names] - @destination_user_items.map(&:name)
         if missing_items.any?
           render json: { error: "the following items are not on destination user's inventory: #{missing_items.join(', ')}" }, status: :not_found and return
         end
@@ -66,6 +66,7 @@ module Api
       end
 
       private
+
       def item_params
         params.require(:item).permit(:name)
       end
