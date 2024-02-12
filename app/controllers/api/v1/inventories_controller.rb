@@ -34,30 +34,33 @@ module Api
 
       def exchange_item
         @user = User.find(params[:id])
-        @friend = User.find(params[:destination_user][:id])
-        @item = @user.inventory.items.find_by(name: item_params[:name])
-        if @item.nil?
-          if ::Item::VALID_NAMES.include?(item_params[:name])
-            render json: { error: "Item is not on user's inventory" }, status: :not_found and return
-          else
-            render json: { error: 'Invalid item name' }, status: :bad_request and return
-          end
+        @destination_user = User.find(params[:destination_user][:id])
+
+        if params[:origin_user][:item_names].any? {|item_name| !::Item::VALID_NAMES.include?(item_name)}
+          render json: { error: "Invalid item name" }, status: :bad_request and return
         end
 
-        @friend_item = @friend.inventory.items.find_by(name: params[:destination_user][:item_name])
-        if @friend_item.nil?
-          if ::Item::VALID_NAMES.include?(params[:destination_user][:item_name])
-            render json: { error: "Item is not on firend's inventory" }, status: :not_found and return
-          else
-            render json: { error: 'Invalid item name' }, status: :bad_request and return
-          end
+        @origin_items = @user.inventory.items.where(name: params[:origin_user][:item_names])
+        missing_items = params[:origin_user][:item_names] - @origin_items.map(&:name)
+        if missing_items.any?
+          render json: { error: "the following items are not on origin user's inventory: #{missing_items.join(', ')}" }, status: :not_found and return
         end
 
-        @user.inventory.items.delete(@item)
-        @user.inventory.items << @friend_item
+        if params[:destination_user][:item_names].any? {|item_name| !::Item::VALID_NAMES.include?(item_name)}
+          render json: { error: "Invalid item name" }, status: :bad_request and return
+        end
 
-        @friend.inventory.items.delete(@friend_item)
-        @friend.inventory.items << @item
+        @destination_user_items = @destination_user.inventory.items.where(name: params[:destination_user][:item_names])
+        missing_items = params[:destination_user][:item_names] - @destination_user_items.map(&:name)
+        if missing_items.any?
+          render json: { error: "the following items are not on destination user's inventory: #{missing_items.join(', ')}" }, status: :not_found and return
+        end
+
+        @user.inventory.items.delete(@origin_items)
+        @user.inventory.items << @destination_user_items
+
+        @destination_user.inventory.items.delete(@destination_user_items)
+        @destination_user.inventory.items << @origin_items
 
         render json: @user
       end
@@ -65,6 +68,14 @@ module Api
       private
       def item_params
         params.require(:item).permit(:name)
+      end
+
+      def origin_item_params
+        params.require(:origin_user).permit(:id, item_names: [])
+      end
+
+      def destination_item_params
+        params.require(:destination_user).permit(:id, item_names: [])
       end
     end
   end
