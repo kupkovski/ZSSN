@@ -56,6 +56,13 @@ module Api
           render json: { error: "the following items are not on destination user's inventory: #{missing_items.join(', ')}" }, status: :not_found and return
         end
 
+        original_costs = @origin_items.sum(&:cost)
+        destination_costs = @destination_user_items.sum(&:cost)
+
+        if original_costs != destination_costs
+          render json: { error: "the cost of exchanging items don't match" }, status: :unprocessable_entity and return
+        end
+
         @user.inventory.items.delete(@origin_items)
         @user.inventory.items << @destination_user_items
 
