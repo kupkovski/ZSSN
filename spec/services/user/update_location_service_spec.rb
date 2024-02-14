@@ -1,21 +1,23 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require_relative '../../../app/services/user/update_location_service'
 
 RSpec.describe Services::User::UpdateLocationService, type: :service do
-  subject { described_class.new(user: user, latitude: latitude, longitude: longitude) }
+  subject { described_class.new(user:, latitude:, longitude:) }
 
   describe 'with valid parameters' do
     let(:latitude) { -99 }
     let(:longitude) { -88 }
-    let(:user) {
-      User.create!(name: "John Doe", latitude: 100, longitude: 200, gender: 'male', birthdate: "1980-01-01")
-    }
+    let(:user) do
+      User.create!(name: 'John Doe', latitude: 100, longitude: 200, gender: 'male', birthdate: '1980-01-01')
+    end
 
     it 'updates the user lat an long attributes' do
       expect(subject.call).to eq true
       user.reload
-      expect(user.latitude).to eq -99
-      expect(user.longitude).to eq -88
+      expect(user.latitude).to eq(-99)
+      expect(user.longitude).to eq(-88)
     end
   end
 
@@ -32,10 +34,10 @@ RSpec.describe Services::User::UpdateLocationService, type: :service do
     end
 
     context 'when lat is nil' do
-      let(:user) {
-        User.create!(name: "John Doe", latitude: 100, longitude: 200, gender: 'male', birthdate: "1980-01-01")
-      }
-      let(:latitude) { nil}
+      let(:user) do
+        User.create!(name: 'John Doe', latitude: 100, longitude: 200, gender: 'male', birthdate: '1980-01-01')
+      end
+      let(:latitude) { nil }
       let(:longitude) { -88 }
 
       it 'returns an error for user nil' do
@@ -45,10 +47,10 @@ RSpec.describe Services::User::UpdateLocationService, type: :service do
     end
 
     context 'when lon is nil' do
-      let(:user) {
-        User.create!(name: "John Doe", latitude: 100, longitude: 200, gender: 'male', birthdate: "1980-01-01")
-      }
-      let(:latitude) { 99}
+      let(:user) do
+        User.create!(name: 'John Doe', latitude: 100, longitude: 200, gender: 'male', birthdate: '1980-01-01')
+      end
+      let(:latitude) { 99 }
       let(:longitude) { nil }
 
       it 'returns an error for user nil' do
@@ -58,9 +60,9 @@ RSpec.describe Services::User::UpdateLocationService, type: :service do
     end
 
     context 'when lat is not numeric' do
-      let(:user) {
-        User.create!(name: "John Doe", latitude: 100, longitude: 200, gender: 'male', birthdate: "1980-01-01")
-      }
+      let(:user) do
+        User.create!(name: 'John Doe', latitude: 100, longitude: 200, gender: 'male', birthdate: '1980-01-01')
+      end
       let(:latitude) { 'abc' }
       let(:longitude) { 88 }
 
@@ -70,10 +72,10 @@ RSpec.describe Services::User::UpdateLocationService, type: :service do
       end
     end
 
-   context 'when lat is not numeric' do
-      let(:user) {
-        User.create!(name: "John Doe", latitude: 100, longitude: 200, gender: 'male', birthdate: "1980-01-01")
-      }
+    context 'when lat is not numeric' do
+      let(:user) do
+        User.create!(name: 'John Doe', latitude: 100, longitude: 200, gender: 'male', birthdate: '1980-01-01')
+      end
       let(:latitude) { 99 }
       let(:longitude) { 'def' }
 

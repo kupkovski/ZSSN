@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
+# a User
 class User < ApplicationRecord
-  has_many :infection_accusations, foreign_key: :reporter_id, class_name: "InfectedUserReport"
-  has_many :infection_suspections, foreign_key: :suspect_id, class_name: "InfectedUserReport"
+  has_many :infection_accusations, foreign_key: :reporter_id, class_name: 'InfectedUserReport'
+  has_many :infection_suspections, foreign_key: :suspect_id, class_name: 'InfectedUserReport'
   has_one :inventory
 
   validates :name, :gender, :latitude, :longitude, :birthdate, presence: true

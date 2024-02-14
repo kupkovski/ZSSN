@@ -1,10 +1,13 @@
+# frozen_string_literal: true
+
 require_relative '../../../services'
 require_relative '../../../serializers/user_serializer'
 
 module Api
   module V1
+    # Controller to handle actions related to user
     class UsersController < ApplicationController
-      before_action :set_user, only: %i[ show update destroy ]
+      before_action :set_user, only: %i[show update destroy]
 
       # GET /users
       def index
@@ -30,7 +33,9 @@ module Api
           birthdate: create_user_params[:birthdate]
         )
 
-        if response = service.call
+        response = service.call
+
+        if response
           render json: response, status: :created
         else
           render json: service.errors, status: :unprocessable_entity
@@ -49,11 +54,10 @@ module Api
       # PATCH/PUT /users/1/update_location
       def update_location
         @user = User.find(params[:id])
-        location_params = update_location_params
         service = ::Services::User::UpdateLocationService.new(
           user: @user,
-          latitude: location_params[:latitude],
-          longitude: location_params[:longitude]
+          latitude: update_location_params[:latitude],
+          longitude: update_location_params[:longitude]
         )
 
         if service.call
@@ -69,8 +73,9 @@ module Api
         report_params = report_infected_params
         @reporter_user = User.find(report_params[:reporter_user_id])
         service = ::Services::User::ReportInfectedService.new(suspect: @user, reporter: @reporter_user)
+        response = service.call
 
-        if response = service.call
+        if response
           render json: response
         else
           render json: service.error_messages, status: :unprocessable_entity
@@ -83,23 +88,24 @@ module Api
       end
 
       private
-        # Use callbacks to share common setup or constraints between actions.
-        def set_user
-          @user = User.find(params[:id])
-        end
 
-        # Only allow a list of trusted parameters through.
-        def user_params
-          params.require(:user).permit(:name, :gender, :latitude, :longitude, :birthdate)
-        end
+      # Use callbacks to share common setup or constraints between actions.
+      def set_user
+        @user = User.find(params[:id])
+      end
 
-        def update_location_params
-          params.require(:user).permit(:latitude, :longitude)
-        end
+      # Only allow a list of trusted parameters through.
+      def user_params
+        params.require(:user).permit(:name, :gender, :latitude, :longitude, :birthdate)
+      end
 
-        def report_infected_params
-          params.require(:user).permit(:reporter_user_id)
-        end
+      def update_location_params
+        params.require(:user).permit(:latitude, :longitude)
+      end
+
+      def report_infected_params
+        params.require(:user).permit(:reporter_user_id)
+      end
     end
   end
 end

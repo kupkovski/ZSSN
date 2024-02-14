@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'active_model_serializers'
 
+# Represents an User in JSON
 class UserSerializer < ActiveModel::Serializer
   has_one :inventory
   attributes :id, :name, :age, :infected

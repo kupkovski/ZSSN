@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 module Services
   module User
+    # Orchestrate all required steps to allow an user to get his/her location info updated
     class UpdateLocationService
       attr_reader :errors
 
@@ -18,20 +21,22 @@ module Services
         result = @errors.map do |attr, message|
           "#{attr.capitalize}: #{message}"
         end
-        result.join(", ")
+        result.join(', ')
       end
 
       private
-        attr_reader :user, :latitude, :longitude
 
-        def valid?
-          errors[:user] ||= "Should not be blank" and return false if user.blank?
-          errors[:latitude] ||= "Should not be blank" and return false if latitude.blank?
-          errors[:longitude] ||= "Should not be blank" and return false if longitude.blank?
-          errors[:latitude] ||= "Should be numeric" and return false unless latitude.is_a?(Numeric)
-          errors[:longitude] ||= "Should be numeric" and return false unless longitude.is_a?(Numeric)
-          true
-        end
+      attr_reader :user, :latitude, :longitude
+
+      def valid?
+        errors[:user] ||= 'Should not be blank' and return false if user.blank?
+        errors[:latitude] ||= 'Should not be blank' and return false if latitude.blank?
+        errors[:longitude] ||= 'Should not be blank' and return false if longitude.blank?
+        errors[:latitude] ||= 'Should be numeric' and return false unless latitude.is_a?(Numeric)
+        errors[:longitude] ||= 'Should be numeric' and return false unless longitude.is_a?(Numeric)
+
+        true
+      end
     end
   end
 end
