@@ -1,4 +1,4 @@
-# require_relative './api_controller'
+require_relative '../../../serializers/user_serializer'
 
 module Api
   module V1
