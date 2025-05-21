@@ -48,5 +48,6 @@ group :development, :test do
   gem "rspec", "~> 3.13"
   gem "rspec-rails", "~> 8.0"
   gem "shoulda-matchers", "~> 6.5"
+  gem "faker", "~> 3.5"
 end
 

@@ -7,3 +7,19 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+#
+
+(1..50).each do |n|
+  data = {
+    name: Faker::Name.name,
+    birthdate: Faker::Date.between(from: Date.current - 70.years, to: Date.current - 20.years),
+    gender: %w[male female].sample,
+    latitude: Faker::Address.latitude,
+    longitude: Faker::Address.longitude,
+    infected: false
+  }
+
+  User.create!(data)
+  print "."
+  puts "Done!"
+end
