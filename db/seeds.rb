@@ -16,7 +16,6 @@
     gender: %w[male female].sample,
     latitude: Faker::Address.latitude,
     longitude: Faker::Address.longitude,
-    infected: false
   }
 
   User.create!(data)
