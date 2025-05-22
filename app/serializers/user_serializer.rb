@@ -2,7 +2,7 @@ require 'active_model_serializers'
 
 class UserSerializer < ActiveModel::Serializer
 
-  attributes :id, :name, :age, :birthdate, :gender, 
+  attributes :id, :name, :age, :gender, 
              :latitude, :longitude, :infected
 
   def age
