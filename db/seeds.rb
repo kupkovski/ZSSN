@@ -15,7 +15,7 @@
     birthdate: Faker::Date.between(from: Date.current - 70.years, to: Date.current - 20.years),
     gender: %w[male female].sample,
     latitude: Faker::Address.latitude,
-    longitude: Faker::Address.longitude,
+    longitude: Faker::Address.longitude
   }
 
   User.create!(data)

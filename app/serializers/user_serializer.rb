@@ -1,8 +1,7 @@
-require 'active_model_serializers'
+require "active_model_serializers"
 
 class UserSerializer < ActiveModel::Serializer
-
-  attributes :id, :name, :age, :gender, 
+  attributes :id, :name, :age, :gender,
              :latitude, :longitude, :infected
 
   def age
@@ -10,6 +9,7 @@ class UserSerializer < ActiveModel::Serializer
   end
 
   def infected
-    object.infected?
+    # TODO: implement object.infected?
+    false
   end
 end

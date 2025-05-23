@@ -1,4 +1,4 @@
-require_relative '../../../serializers/user_serializer'
+require_relative "../../../serializers/user_serializer"
 
 module Api
   module V1
@@ -26,4 +26,3 @@ module Api
     end
   end
 end
-

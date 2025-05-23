@@ -71,7 +71,7 @@ RSpec.describe "Users", type: :request do
         post '/api/v1/users', headers: headers, params: { user: params }
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
-        expected_errors = {errors: "Name can't be blank, Gender can't be blank, Latitude can't be blank, and Longitude can't be blank" }.to_json
+        expected_errors = { errors: "Name can't be blank, Gender can't be blank, Latitude can't be blank, and Longitude can't be blank" }.to_json
         expect(response.body).to eq expected_errors
       end
     end
