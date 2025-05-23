@@ -9,7 +9,6 @@ class UserSerializer < ActiveModel::Serializer
   end
 
   def infected
-    # TODO: implement object.infected?
-    false
+    object.infected?
   end
 end
