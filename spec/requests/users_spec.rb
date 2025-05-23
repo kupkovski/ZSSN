@@ -51,15 +51,7 @@ RSpec.describe "Users", type: :request do
     end
 
     context "with invalid parameters" do
-      let(:params) {
-        {
-          name: nil,
-          gender: nil,
-          latitude: nil,
-          longitude: nil,
-          birthdate: "01"
-        }
-      }
+      let(:params) { { name: nil, gender: nil, latitude: nil, longitude: nil, birthdate: "01" } }
 
       it "does not create a new User" do
         expect {
@@ -75,5 +67,46 @@ RSpec.describe "Users", type: :request do
         expect(response.body).to eq expected_errors
       end
     end
+
+
+  describe "PATCH /update" do
+    context "with valid parameters" do
+      let(:params) do
+        {
+          latitude: -14.2400732,
+          longitude: -53.1805017
+        }
+      end
+
+      it "updates the users location" do
+        user = User.create!(name: "John Doe", latitude: 100, longitude: 200, gender: 'male', birthdate: "1980-01-01")
+
+        patch "/api/v1/users/#{user.id}", params: { user: params }, as: :json
+        user.reload
+        expect(user.latitude).to eq -14.2400732
+        expect(user.longitude).to eq -53.1805017
+      end
+    end
+
+    context "with invalid parameters" do
+      let(:params) do
+        {
+          latitude: nil,
+          longitude: "joia"
+        }
+      end
+
+      it "updates the users location" do
+        user = User.create!(name: "John Doe", latitude: 100, longitude: 200, gender: 'male', birthdate: "1980-01-01")
+
+        patch "/api/v1/users/#{user.id}", params: { user: params }, as: :json
+        user.reload
+        expect(user.latitude).to eq 100
+        expect(user.longitude).to eq 200
+        expect(response.body).to eq({ errors: "Latitude can't be blank" }.to_json)
+        expect(response.status).to eq 422
+      end
+    end
+  end
   end
 end
