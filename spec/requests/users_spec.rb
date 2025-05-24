@@ -151,7 +151,7 @@ RSpec.describe "Users", type: :request do
 
       it "returns not found" do
         expect do
-          patch "/api/v1/users/#{suspect.id}/report_infected", params: { user: { id: suspect.id, reporter_user_id: nil} }, as: :json
+          patch "/api/v1/users/#{suspect.id}/report_infected", params: { user: { id: suspect.id, reporter_user_id: nil } }, as: :json
         end.to change { InfectedUserReport.count }.by(0)
 
         expect(response.status).to eq 404

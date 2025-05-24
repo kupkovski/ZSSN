@@ -51,4 +51,6 @@ group :development, :test do
   gem "rspec-rails", "~> 8.0"
   gem "shoulda-matchers", "~> 6.5"
   gem "faker", "~> 3.5"
+  gem "guard", "~> 2.19"
+  gem "guard-rspec", "~> 4.7"
 end

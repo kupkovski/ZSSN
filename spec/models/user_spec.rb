@@ -12,6 +12,7 @@ RSpec.describe User, type: :model do
   describe 'association' do
     it { should have_many(:infection_accusations) }
     it { should have_many(:infection_suspections) }
+    it { should have_one(:inventory) }
   end
 
   describe 'infected?' do

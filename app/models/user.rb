@@ -4,6 +4,8 @@ class User < ApplicationRecord
   has_many :infection_accusations, foreign_key: :reporter_id, class_name: "InfectedUserReport"
   has_many :infection_suspections, foreign_key: :suspect_id, class_name: "InfectedUserReport"
 
+  has_one :inventory
+
   def infected?
     reports = infection_suspections.group(:reporter_id).size
     return false if reports.empty?
