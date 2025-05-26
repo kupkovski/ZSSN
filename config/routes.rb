@@ -14,6 +14,9 @@ Rails.application.routes.draw do
         member do
           patch :report_infected
         end
+
+        resource :inventory, only: %i[show update destroy] do
+        end
       end
     end
   end
