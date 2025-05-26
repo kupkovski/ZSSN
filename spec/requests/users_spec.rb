@@ -27,8 +27,9 @@ RSpec.describe "Users", type: :request do
     it 'succeeds with a json response' do
       get '/api/v1/users', headers: headers
       expect(response.status).to eq 200
+
       expect(response.body).to eq [
-                                    { id: user1.id, name: "John Doe",      age: 45, gender: "male",  latitude: 19.98, longitude: 29.88, infected: false },
+                                    { id: user1.id, name: "John Doe",      age: 45, gender: "male",   latitude: 19.98, longitude: 29.88, infected: false },
                                     { id: user2.id, name: "Jaqueline Doe", age: 44, gender: "female", latitude: 29.98, longitude: 49.88, infected: false }
       ].to_json
     end
@@ -155,6 +156,26 @@ RSpec.describe "Users", type: :request do
         end.to change { InfectedUserReport.count }.by(0)
 
         expect(response.status).to eq 404
+      end
+    end
+
+    describe 'get /user/:id' do
+      context 'for an existing user' do
+        let(:user) {
+          User.create!(name: "Johnny Bravo", latitude: 100, longitude: 200, gender: 'male', birthdate: "1980-01-01")
+        }
+
+        it 'returns 404 status' do
+          get "/api/v1/users/#{user.id}", headers: headers
+          expect(response.status).to eq 200
+        end
+      end
+
+      context 'for an unexisting user' do
+        it 'returns 404 status' do
+          get "/api/v1/users/0", headers: headers
+          expect(response.status).to eq 404
+        end
       end
     end
   end

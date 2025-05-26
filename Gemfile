@@ -53,4 +53,5 @@ group :development, :test do
   gem "faker", "~> 3.5"
   gem "guard", "~> 2.19"
   gem "guard-rspec", "~> 4.7"
+  gem "database_cleaner", "~> 2.1"
 end
